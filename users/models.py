@@ -6,14 +6,14 @@ NULLABLE = {'blank': True, 'null': True}
 
 
 class User(AbstractUser):
-    # username = None
+    username = None
     email = models.EmailField(unique=True, verbose_name='Почта')
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     last_name = models.CharField(max_length=50, verbose_name='Фамилия')
     phone_number = models.CharField(max_length=25, **NULLABLE, verbose_name='Номер телефона')
 
-    # USERNAME_FIELD = 'email'
-    # REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = 'пользователь'
