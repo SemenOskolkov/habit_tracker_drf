@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from good_habits.models import Habit
 from good_habits.permissions import OwnerPerms
 from good_habits.serializers import HabitSerializer, PublicHabitSerializer
+from good_habits.tasks import time_reminder
 
 
 class PublicHabitsListView(generics.ListAPIView):
@@ -28,6 +29,10 @@ class HabitCreatAPIView(generics.CreateAPIView):
     serializer_class = HabitSerializer
     queryset = Habit.objects.all()
     permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        time_reminder.delay()
 
 
 class HabitRetrieveAPIView(generics.RetrieveAPIView):

@@ -20,6 +20,7 @@ class HabitTestCase(APITestCase):
             first_name=self.first_name,
             last_name=self.last_name,
             phone_number=self.phone_number,
+            telegram_chat_id=None,
         )
         self.user.set_password(self.password)
         # self.user.is_superuser = True

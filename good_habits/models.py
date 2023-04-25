@@ -15,6 +15,7 @@ class Habit(models.Model):
     reward = models.CharField(max_length=200, **NULLABLE, verbose_name='Вознаграждение')
     execution_time = models.TimeField(verbose_name='Время на выполнение')
     sign_publicity = models.BooleanField(default=False, verbose_name='Признак публичности')
+    last_run = models.DateField(**NULLABLE, verbose_name='Последнее выполнение')
 
     class Meta:
         verbose_name = 'привычка'

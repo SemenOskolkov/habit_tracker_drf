@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_celery_beat',
 
     'good_habits',
     'users',
@@ -155,3 +156,6 @@ SIMPLE_JWT = {
 }
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+TELEGRAM_URL = os.getenv('TELEGRAM_URL')
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
