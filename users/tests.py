@@ -77,7 +77,7 @@ class UserTestCase(APITestCase):
                 'first_name': self.new_test_first_name,
                 'last_name': self.new_test_last_name,
                 'phone_number': self.new_test_phone_number,
-                'password': self.new_test_password,
+                # 'password': self.new_test_password,
                 'telegram_chat_id': self.new_test_telegram_chat_id,
             }
         )
@@ -94,7 +94,7 @@ class UserTestCase(APITestCase):
                 'first_name': self.new_test_first_name,
                 'last_name': self.new_test_last_name,
                 'phone_number': self.new_test_phone_number,
-                'password': self.new_test_password,
+                # 'password': self.new_test_password,
                 'telegram_chat_id': self.new_test_telegram_chat_id,
             }
         )
