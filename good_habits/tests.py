@@ -12,6 +12,7 @@ class HabitTestCase(APITestCase):
     first_name = 'test_first_name'
     last_name = 'test_first_name'
     phone_number = '+79991110000'
+    telegram_chat_id = '@testchatid'
 
     def setUp(self) -> None:
 
@@ -20,7 +21,7 @@ class HabitTestCase(APITestCase):
             first_name=self.first_name,
             last_name=self.last_name,
             phone_number=self.phone_number,
-            telegram_chat_id=None,
+            telegram_chat_id=self.telegram_chat_id,
         )
         self.user.set_password(self.password)
         # self.user.is_superuser = True
@@ -84,7 +85,7 @@ class HabitTestCase(APITestCase):
         )
 
     def test_habit_create(self):  # Создание привычки
-        response = self.client.post('/good_habits/habits/create/',
+        response = self.client.post('/good_habits/habit/create/',
                                     {
                                         'owner': self.user,
                                         'place': self.test_place,
@@ -96,6 +97,7 @@ class HabitTestCase(APITestCase):
                                         'sign_publicity': self.test_sign_publicity,
                                     }
                                     )
+        print(response.json())
 
         self.assertEqual(
             response.status_code,
@@ -130,7 +132,7 @@ class HabitTestCase(APITestCase):
         )
 
     def test_habit_update(self):  # Изменение привычки
-        response = self.client.put(
+        response = self.client.patch(
             reverse('good_habit:habit_update', args=[self.habit.pk]),
             {
                 'owner': self.user.pk,
