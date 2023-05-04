@@ -41,32 +41,14 @@ class HabitTestCase(APITestCase):
         self.habit = Habit.objects.create(
             owner=self.user,
             place='Дом',
-            time='10:00',
+            time='10:00:00',
             action='Сделать зарядку',
-            good_habit_sign='True',
-            periodicity='1',
+            good_habit_sign=True,
+            periodicity=1,
             execution_time='00:02:00',
-            sign_publicity='True',
+            sign_publicity=True,
 
         )
-
-        '''CREATE Исходные данные'''
-        self.test_place = 'Квартира'
-        self.test_time = '15:00'
-        self.test_action = 'Съесть апельсин'
-        self.test_good_habit_sign = 'True'
-        self.test_periodicity = '1'
-        self.test_execution_time = '00:02:00'
-        self.test_sign_publicity = 'True'
-
-        '''UPDATE Новые данные'''
-        self.test_new_place = 'Квартира'
-        self.test_new_time = '15:00'
-        self.test_new_action = 'Съесть яблоко'
-        self.test_new_good_habit_sign = 'True'
-        self.test_new_periodicity = '1'
-        self.test_new_execution_time = '00:02:00'
-        self.test_new_sign_publicity = 'True'
 
     def test_public_habit_list(self):
         response = self.client.get('/good_habits/habits/public/')
@@ -85,9 +67,18 @@ class HabitTestCase(APITestCase):
         )
 
     def test_habit_create(self):  # Создание привычки
+        '''CREATE Исходные данные'''
+        self.test_place = 'Квартира'
+        self.test_time = '15:00:00'
+        self.test_action = 'Съесть апельсин'
+        self.test_good_habit_sign = True
+        self.test_periodicity = 1
+        self.test_execution_time = '00:02:00'
+        self.test_sign_publicity = True
+
         response = self.client.post('/good_habits/habit/create/',
                                     {
-                                        'owner': self.user,
+                                        'owner': self.user.pk,
                                         'place': self.test_place,
                                         'time': self.test_time,
                                         'action': self.test_action,
@@ -116,14 +107,18 @@ class HabitTestCase(APITestCase):
         )
 
         expected_data = {
+            'id': self.habit.pk,
             'owner': self.user.pk,
-            'place': self.test_place,
-            'time': self.test_time,
-            'action': self.test_action,
-            'good_habit_sign': self.test_good_habit_sign,
-            'periodicity': self.test_periodicity,
-            'execution_time': self.test_execution_time,
-            'sign_publicity': self.test_sign_publicity,
+            'place': self.habit.place,
+            'time': self.habit.time,
+            'action': self.habit.action,
+            'good_habit_sign': self.habit.good_habit_sign,
+            'associated_habit': None,
+            'periodicity': self.habit.periodicity,
+            'reward': None,
+            'execution_time': self.habit.execution_time,
+            'sign_publicity': self.habit.sign_publicity,
+            'last_run': None,
         }
 
         self.assertEqual(
@@ -132,6 +127,15 @@ class HabitTestCase(APITestCase):
         )
 
     def test_habit_update(self):  # Изменение привычки
+        '''UPDATE Новые данные'''
+        self.test_new_place = 'Квартира'
+        self.test_new_time = '10:00:00'
+        self.test_new_action = 'Съесть яблоко'
+        self.test_new_good_habit_sign = True
+        self.test_new_periodicity = 1
+        self.test_new_execution_time = '00:02:00'
+        self.test_new_sign_publicity = True
+
         response = self.client.patch(
             reverse('good_habit:habit_update', args=[self.habit.pk]),
             {
@@ -160,9 +164,12 @@ class HabitTestCase(APITestCase):
                 'time': self.test_new_time,
                 'action': self.test_new_action,
                 'good_habit_sign': self.test_new_good_habit_sign,
+                'associated_habit': None,
                 'periodicity': self.test_new_periodicity,
+                'reward': None,
                 'execution_time': self.test_new_execution_time,
                 'sign_publicity': self.test_new_sign_publicity,
+                'last_run': None,
             }
         )
 
