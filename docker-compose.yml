@@ -44,7 +44,10 @@ services:
     container_name: api
     build:
       context: .
-    entrypoint: sh -c "/init_script.sh"
+    command: bash -c "
+      python3 manage.py migrate 
+      && python3 manage.py runserver 0.0.0.0:8000
+      "
     tty: false
     volumes:
       - .:/code
