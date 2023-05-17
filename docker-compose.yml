@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+
+  celery-worker:
+    build: .
+    container_name: celery-worker
+    command: celery -A config worker -l info
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery-beat:
+    build: .
+    container_name: celery-beat
+    command: celery -A config beat -l info -S django
+    depends_on:
+      celery-worker:
+        condition: service_started
+
+  api:
+    container_name: api
+    build:
+      context: .
+    entrypoint: sh -c "/init_script.sh"
+    tty: false
+    volumes:
+      - .:/code
+    restart: on-failure
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
