@@ -1,10 +1,10 @@
 FROM python:3
 
-WORKDIR /code
+WORKDIR /habit_tracker_drf
 
-COPY ./requirements.txt /code
+COPY ./requirements.txt /habit_tracker_drf
 
 RUN pip install --upgrade pip
-RUN pip install -r /code/requirements.txt
+RUN pip install -r /habit_tracker_drf/requirements.txt
 
 COPY . .
